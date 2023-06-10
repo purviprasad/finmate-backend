@@ -160,7 +160,7 @@ exports.deleteTransactionDetails = async (req, res) => {
     if (result.affectedRows > 0) {
       res.status(200).json({
         status: "SUCCESS",
-        message: DELETE_SUCCESS,
+        message: `Transaction ${DELETE_SUCCESS}`,
       });
     } else {
       res.status(404).json({
@@ -187,6 +187,25 @@ exports.addTransactionDetails = async (req, res) => {
       transaction,
       req.user
     );
+    //update spent in budget table
+    // if (transaction.type === "Expense") {
+    //   let budget = await fetchBudgetDetailsByMonthYear(
+    //     connectionPromise,
+    //     transaction.date.split("/")[1],
+    //     transaction.date.split("/")[2],
+    //     req.user
+    //   );
+    //   if (budget.length > 0) {
+    //     let spent = budget[0].spent + transaction.amount;
+    //     await updateBudgetDetails(
+    //       connectionPromise,
+    //       budget[0].id,
+    //       spent,
+    //       req.user
+    //     );
+    //   }
+    // }
+
     if (result.affectedRows > 0) {
       res.status(200).json({
         status: "SUCCESS",

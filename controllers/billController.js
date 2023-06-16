@@ -26,6 +26,10 @@ exports.viewActiveBillDetails = async (req, res) => {
     if (result.length > 0) {
       result.map(item => {
         item.due_date = moment(item.due_date).format("DD/MM/YYYY");
+        if (item.last_updated_time)
+          item.last_updated_time = moment(item.last_updated_time).format(
+            "DD/MM/YYYY"
+          );
       });
 
       res.status(200).json({
@@ -53,6 +57,10 @@ exports.viewInActiveBillDetails = async (req, res) => {
     if (result.length > 0) {
       result.map(item => {
         item.due_date = moment(item.due_date).format("DD/MM/YYYY");
+        if (item.last_updated_time)
+          item.last_updated_time = moment(item.last_updated_time).format(
+            "DD/MM/YYYY"
+          );
       });
 
       res.status(200).json({
@@ -114,6 +122,7 @@ exports.addBillDetails = async (req, res) => {
       } else {
         bill.status = "Completed";
       }
+      bill.last_updated_time = moment().format("YYYY/MM/DD");
     }
     await addBillDetails(connectionPromise, bill, req.user)
       .then(async result => {
@@ -133,6 +142,7 @@ exports.addBillDetails = async (req, res) => {
                   : bill.category,
               remarks: bill.remarks,
               bill_id: bill.bill_id,
+              due_date: due_date,
             };
             await addTransactionDetails(
               connectionPromise,
@@ -223,6 +233,7 @@ exports.updateBillStatus = async (req, res) => {
         bill.status = "Completed";
       }
     }
+    bill.last_updated_time = moment().format("YYYY/MM/DD");
     await updateBillStatus(connectionPromise, bill, req.user)
       .then(async result => {
         if (result.affectedRows > 0) {
@@ -232,7 +243,7 @@ exports.updateBillStatus = async (req, res) => {
               type: "Expense",
               description: bill.description,
               amount: bill.amount,
-              date: due_date,
+              date: moment().format("YYYY/MM/DD"),
               category: "Others",
               category_others:
                 bill.category === "Others"
@@ -240,6 +251,7 @@ exports.updateBillStatus = async (req, res) => {
                   : bill.category,
               remarks: bill.remarks,
               bill_id: bill.bill_id,
+              due_date: due_date,
             };
             await addTransactionDetails(
               connectionPromise,

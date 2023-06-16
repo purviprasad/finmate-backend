@@ -13,6 +13,7 @@ const {
   addTransactionDetails,
   updateTransactionDetails,
   fetchRecentTransactionDetails,
+  fetchTransactionDetailsByBillId,
 } = require("../repository/transactionRepository");
 const moment = require("moment");
 
@@ -147,6 +148,39 @@ exports.viewTransactionDetailsByType = async (req, res) => {
     });
   }
 };
+exports.viewTransactionDetailsByBillId = async (req, res) => {
+  let connection = await getDbConnection();
+  let connectionPromise = util.promisify(connection.query).bind(connection);
+  try {
+    let result = await fetchTransactionDetailsByBillId(
+      connectionPromise,
+      req.params.bill_id,
+      req.user
+    );
+    if (result.length > 0) {
+      result.map(item => {
+        item.date = moment(item.date).format("DD/MM/YYYY");
+        if (item.due_date)
+          item.due_date = moment(item.due_date).format("DD/MM/YYYY");
+      });
+      res.status(200).json({
+        status: "SUCCESS",
+        data: result,
+      });
+    } else {
+      res.status(200).json({
+        status: "NO_DATA_FOUND",
+        data: result,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      status: "ERROR",
+      message: err ? err.message : "Something went wrong, Please try again!",
+    });
+  }
+};
+
 exports.deleteTransactionDetails = async (req, res) => {
   let connection = await getDbConnection();
   let connectionPromise = util.promisify(connection.query).bind(connection);

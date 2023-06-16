@@ -24,7 +24,7 @@ exports.addTransactionDetails = async (
   user
 ) => {
   let result = await connectionPromise(
-    `INSERT INTO transactions (user_id, type, amount, date, description, category, remarks, category_others, bill_id) VALUES ('${user.user_id}', '${transaction.type}', '${transaction.amount}', '${transaction.date}', '${transaction.description}', '${transaction.category}', '${transaction.remarks}', '${transaction.category_others}', '${transaction?.bill_id}')`
+    `INSERT INTO transactions (user_id, type, amount, date, description, category, remarks, category_others, bill_id, due_date) VALUES ('${user.user_id}', '${transaction.type}', '${transaction.amount}', '${transaction.date}', '${transaction.description}', '${transaction.category}', '${transaction.remarks}', '${transaction.category_others}', '${transaction?.bill_id}', '${transaction?.due_date}')`
   );
   return result;
 };
@@ -93,5 +93,16 @@ exports.fetchRecentTransactionDetails = async (
 exports.fetchSpent = async (connectionPromise, budget, user) => {
   let query = `SELECT SUM(amount) AS spent FROM transactions WHERE type = 'Expense' AND user_id = '${user.user_id}' AND date BETWEEN '${budget.start_date}' AND '${budget.end_date}'`;
   let result = await connectionPromise(query);
+  return result;
+};
+
+exports.fetchTransactionDetailsByBillId = async (
+  connectionPromise,
+  bill_id,
+  user
+) => {
+  let result = await connectionPromise(
+    `SELECT * FROM transactions WHERE bill_id = '${bill_id}' AND user_id = '${user.user_id}'`
+  );
   return result;
 };

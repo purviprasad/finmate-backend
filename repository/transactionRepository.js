@@ -24,7 +24,7 @@ exports.addTransactionDetails = async (
   user
 ) => {
   let result = await connectionPromise(
-    `INSERT INTO transactions (user_id, type, amount, date, description, category, remarks, category_others) VALUES ('${user.user_id}', '${transaction.type}', '${transaction.amount}', '${transaction.date}', '${transaction.description}', '${transaction.category}', '${transaction.remarks}', '${transaction.category_others}')`
+    `INSERT INTO transactions (user_id, type, amount, date, description, category, remarks, category_others, bill_id) VALUES ('${user.user_id}', '${transaction.type}', '${transaction.amount}', '${transaction.date}', '${transaction.description}', '${transaction.category}', '${transaction.remarks}', '${transaction.category_others}', '${transaction?.bill_id}')`
   );
   return result;
 };

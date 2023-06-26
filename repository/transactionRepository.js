@@ -6,7 +6,7 @@ exports.fetchTransactionDetailsByType = async (
   user
 ) => {
   let result = await connectionPromise(
-    `SELECT * FROM transactions WHERE type = '${type}' AND MONTH(date) = '${month}' AND YEAR(date) = '${year}' and user_id = '${user.user_id}'`
+    `SELECT * FROM transactions WHERE type = '${type}' AND MONTH(date) = '${month}' AND YEAR(date) = '${year}' and user_id = '${user.user_id}' ORDER BY date ASC`
   );
   return result;
 };
@@ -75,6 +75,7 @@ exports.fetchTransactionDetails = async (
       .reverse()
       .join("/")}' AND '${dateEnd.split("/").reverse().join("/")}'`;
   }
+  query += ` ORDER BY date ASC`;
   let result = await connectionPromise(query);
   return result;
 };

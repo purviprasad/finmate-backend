@@ -114,6 +114,7 @@ exports.addBillDetails = async (req, res) => {
   let due_date = bill.due_date;
 
   try {
+    bill.last_updated_time = null;
     if (bill.status === "Paid") {
       if (bill.is_recurring) {
         bill.due_date = moment(bill.due_date, "YYYY/MM/DD")

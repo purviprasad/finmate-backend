@@ -7,7 +7,7 @@ exports.cancelBillDetailsById = async (connectionPromise, bid, user) => {
 
 exports.addBillDetails = async (connectionPromise, bill, user) => {
   let result = await connectionPromise(
-    `INSERT INTO bill (user_id, description, category, amount, due_date, is_recurring, recurring_type, recurring_type_value, category_others, status, remarks, last_updated_time) VALUES ('${user.user_id}','${bill.description}', '${bill.category}', '${bill.amount}', '${bill.due_date}', '${bill.is_recurring}', '${bill.recurring_type}', '${bill.recurring_type_value}', '${bill.category_others}', '${bill.status}', '${bill.remarks}', '${bill?.last_updated_time}')`
+    `INSERT INTO bill (user_id, description, category, amount, due_date, is_recurring, recurring_type, recurring_type_value, category_others, status, remarks, last_updated_time) VALUES ('${user.user_id}','${bill.description}', '${bill.category}', '${bill.amount}', '${bill.due_date}', '${bill.is_recurring}', '${bill.recurring_type}', '${bill.recurring_type_value}', '${bill.category_others}', '${bill.status}', '${bill.remarks}', '${bill.last_updated_time}')`
   );
   return result;
 };

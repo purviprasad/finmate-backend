@@ -61,6 +61,7 @@ exports.fetchBudgetDetails = async (
         .reverse()
         .join("/")}' AND '${end_date.split("/").reverse().join("/")}'`;
   }
+  query += ` ORDER BY start_date DESC`;
   let result = await connectionPromise(query);
   return result;
   // let result = await connectionPromise(

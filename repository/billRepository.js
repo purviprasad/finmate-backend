@@ -27,13 +27,13 @@ exports.updateBillStatus = async (connectionPromise, bill, user) => {
 };
 
 exports.fetchActiveBillDetails = async (connectionPromise, user) => {
-  let query = `SELECT * FROM bill WHERE user_id = '${user.user_id}' AND status not in ('Canceled', 'Completed')`;
+  let query = `SELECT * FROM bill WHERE user_id = '${user.user_id}' AND status not in ('Canceled', 'Completed') ORDER BY due_date ASC`;
   let result = await connectionPromise(query);
   return result;
 };
 
 exports.fetchInActiveBillDetails = async (connectionPromise, user) => {
-  let query = `SELECT * FROM bill WHERE user_id = '${user.user_id}' AND status in ('Canceled', 'Completed')`;
+  let query = `SELECT * FROM bill WHERE user_id = '${user.user_id}' AND status in ('Canceled', 'Completed') ORDER BY due_date DESC`;
   let result = await connectionPromise(query);
   return result;
 };

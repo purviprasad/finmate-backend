@@ -136,9 +136,9 @@ exports.addBillDetails = async (req, res) => {
               description: bill.description,
               amount: bill.amount,
               date: due_date,
-              category: "Others",
+              category: "Other",
               category_others:
-                bill.category === "Others"
+                bill.category === "Other"
                   ? bill.category_others
                   : bill.category,
               remarks: bill.remarks,

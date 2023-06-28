@@ -84,9 +84,11 @@ exports.viewInActiveBillDetails = async (req, res) => {
 exports.cancelBillDetails = async (req, res) => {
   let connection = await getDbConnection();
   let connectionPromise = util.promisify(connection.query).bind(connection);
-  let bid = req.params.id;
+  let bill = {};
+  bill.bid = req.params.id;
+  bill.last_updated_time = moment().format("YYYY/MM/DD");
   try {
-    let result = await cancelBillDetailsById(connectionPromise, bid, req.user);
+    let result = await cancelBillDetailsById(connectionPromise, bill, req.user);
     if (result.affectedRows > 0) {
       res.status(200).json({
         status: "SUCCESS",
@@ -151,7 +153,9 @@ exports.addBillDetails = async (req, res) => {
               req.user
             );
           }
-          bill.due_date = moment(bill.due_date).format("DD/MM/YYYY");
+          bill.due_date = moment(bill.due_date, "YYYY/MM/DD").format(
+            "DD/MM/YYYY"
+          );
           res.status(200).json({
             status: "SUCCESS",
             data: bill,

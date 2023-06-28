@@ -1,6 +1,6 @@
-exports.cancelBillDetailsById = async (connectionPromise, bid, user) => {
+exports.cancelBillDetailsById = async (connectionPromise, bill, user) => {
   let result = await connectionPromise(
-    `UPDATE bill SET status = 'Canceled' WHERE bill_id = '${bid}' AND user_id = '${user.user_id}'`
+    `UPDATE bill SET status = 'Canceled', last_updated_time='${bill.last_updated_time}' WHERE bill_id = '${bill.bid}' AND user_id = '${user.user_id}'`
   );
   return result;
 };

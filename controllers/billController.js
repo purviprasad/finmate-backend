@@ -151,6 +151,7 @@ exports.addBillDetails = async (req, res) => {
               req.user
             );
           }
+          bill.due_date = moment(bill.due_date).format("DD/MM/YYYY");
           res.status(200).json({
             status: "SUCCESS",
             data: bill,

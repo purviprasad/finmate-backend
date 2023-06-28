@@ -4,20 +4,24 @@ exports.fetchDashboardDetails = async (
   date,
   user
 ) => {
-  let query = `SELECT * FROM transactions WHERE user_id = '${user.user_id}'`;
+  let query = "";
   if (dateType === "month") {
-    query += ` AND MONTH(date) = '${date.split("-")[1]}' AND YEAR(date) = '${
+    query += `SELECT * FROM transactions WHERE user_id = '${
+      user.user_id
+    }' AND MONTH(date) = '${date.split("-")[1]}' AND YEAR(date) = '${
       date.split("-")[0]
     }'`;
   } else if (dateType === "year") {
-    query += ` AND YEAR(date) = '${date}'`;
+    query += `SELECT user_id, t_id, type, description, category, Month(date) as date, SUM(amount) as amount, remarks, category_others, last_updated_time, bill_id, due_date FROM transactions WHERE user_id = '${user.user_id}' AND YEAR(date) = '${date}' GROUP BY MONTH(date), type`;
   } else if (dateType === "quarter") {
     //Quarter Q3 remove Q from quarter
     date = date.replace(/Q/, "");
 
-    query += ` AND QUARTER(date) = '${date.split("-")[1]}' AND YEAR(date) = '${
+    query += `SELECT user_id, t_id, type, description, category, Month(date) as date, SUM(amount) as amount, remarks, category_others, last_updated_time, bill_id, due_date FROM transactions WHERE user_id = '${
+      user.user_id
+    }' AND QUARTER(date) = '${date.split("-")[1]}' AND YEAR(date) = '${
       date.split("-")[0]
-    }'`;
+    }' GROUP BY MONTH(date), type`;
   }
   query += ` ORDER BY date ASC`;
   let result = await connectionPromise(query);

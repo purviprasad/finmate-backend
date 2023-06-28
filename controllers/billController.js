@@ -250,9 +250,9 @@ exports.updateBillStatus = async (req, res) => {
               description: bill.description,
               amount: bill.amount,
               date: moment().format("YYYY/MM/DD"),
-              category: "Others",
+              category: "Other",
               category_others:
-                bill.category === "Others"
+                bill.category === "Other"
                   ? bill.category_others
                   : bill.category,
               remarks: bill.remarks,

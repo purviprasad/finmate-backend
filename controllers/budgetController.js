@@ -29,6 +29,20 @@ exports.viewBudgetDetails = async (req, res) => {
       end_date,
       req.user
     );
+    // Calculating spent for each budget
+    for (let i = 0; i < result.length; i++) {
+      let budget = {};
+      budget.start_date = moment(result[i].start_date, "YYYY-MM-DD").format(
+        "YYYY/MM/DD"
+      );
+      budget.end_date = moment(result[i].end_date, "YYYY-MM-DD").format(
+        "YYYY/MM/DD"
+      );
+      let resp = await fetchSpent(connectionPromise, budget, req.user);
+      result[i].spent = resp[0].spent ? resp[0].spent : 0;
+      result[i].status =
+        result[i].spent > result[i].budget ? "Over Limit" : "Under Limit";
+    }
     let totalBudget = result.reduce((a, b) => a + b.budget, 0);
     let totalSpent = result.reduce((a, b) => a + b.spent, 0);
     if (result.length > 0) {

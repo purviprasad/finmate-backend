@@ -20,14 +20,14 @@ exports.deleteBudgetDetailsById = async (connectionPromise, bid, user) => {
 
 exports.addBudgetDetails = async (connectionPromise, budget, user) => {
   let result = await connectionPromise(
-    `INSERT INTO budget (user_id, start_date, end_date, budget, spent, status, remarks, is_recurring) VALUES ('${user.user_id}','${budget.start_date}', '${budget.end_date}', '${budget.budget}', '${budget.spent}', '${budget.status}', '${budget.remarks}', '${budget.is_recurring}')`
+    `INSERT INTO budget (user_id, start_date, end_date, budget, status, remarks, is_recurring) VALUES ('${user.user_id}','${budget.start_date}', '${budget.end_date}', '${budget.budget}', '${budget.status}', '${budget.remarks}', '${budget.is_recurring}')`
   );
   return result;
 };
 
 exports.updateBudgetDetails = async (connectionPromise, budget, user) => {
   let result = await connectionPromise(
-    `UPDATE budget SET  start_date = '${budget.start_date}', end_date = '${budget.end_date}',budget = '${budget.budget}', spent = '${budget.spent}', remarks = '${budget.remarks}', status = '${budget.status}', is_recurring = '${budget.is_recurring}' WHERE b_id = '${budget.b_id}' AND user_id = '${user.user_id}'`
+    `UPDATE budget SET  start_date = '${budget.start_date}', end_date = '${budget.end_date}',budget = '${budget.budget}', remarks = '${budget.remarks}', status = '${budget.status}', is_recurring = '${budget.is_recurring}' WHERE b_id = '${budget.b_id}' AND user_id = '${user.user_id}'`
   );
   return result;
 };

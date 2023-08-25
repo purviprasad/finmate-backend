@@ -116,7 +116,7 @@ exports.addBudgetDetails = async (req, res) => {
   budget.end_date = budget.end_date.split("/").reverse().join("/");
   try {
     let resp = await fetchSpent(connectionPromise, budget, req.user);
-    budget.spent = resp[0].spent;
+    budget.spent = resp[0].spent ? resp[0].spent : 0;
     budget.status = budget.spent > budget.budget ? "Over Limit" : "Under Limit";
     await addBudgetDetails(connectionPromise, budget, req.user)
       .then(result => {

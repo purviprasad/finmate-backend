@@ -121,6 +121,7 @@ exports.addBudgetDetails = async (req, res) => {
     await addBudgetDetails(connectionPromise, budget, req.user)
       .then(result => {
         if (result.affectedRows > 0) {
+          budget.b_id = result.insertId;
           res.status(200).json({
             status: "SUCCESS",
             data: budget,

@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
         if (rows.length > 0) {
           res.status(409).json({
             status: "FAILURE",
-            error: [{ msg: "User already exists" }],
+            error: { msg: "User already exists" },
           });
         } else {
           let user = {
@@ -50,6 +50,11 @@ exports.register = async (req, res) => {
                     expiresIn: "24h",
                   }
                 );
+                axios.post(
+                  `${process.env.CRON_ORIGIN}/cron/welcomeEmailService`,
+                  req.body
+                );
+
                 res
                   .status(200)
                   .cookie("token", token, {
@@ -70,14 +75,14 @@ exports.register = async (req, res) => {
               } else {
                 res.status(400).json({
                   status: "FAILURE",
-                  error: [{ msg: "User not created" }],
+                  error: { msg: "User not created" },
                 });
               }
             })
             .catch(err => {
               res.status(500).json({
                 status: "FAILURE",
-                error: [{ msg: err.message || INTERNAL_SERVER_ERROR }],
+                error: { msg: err.message || INTERNAL_SERVER_ERROR },
               });
             });
         }
@@ -89,10 +94,6 @@ exports.register = async (req, res) => {
       error: [{ msg: err.message || INTERNAL_SERVER_ERROR }],
     });
   } finally {
-    await axios.post(
-      `${process.env.CRON_ORIGIN}/cron/welcomeEmailService`,
-      req.body
-    );
     await closeDbConnection(connection);
   }
 };

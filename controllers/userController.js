@@ -141,13 +141,13 @@ exports.updateUserAvatar = async (req, res) => {
     } else {
       res.status(400).json({
         status: "FAILURE",
-        error: [{ name: user.name, msg: USER_NOT_EXISTS }],
+        error: { name: user.name, msg: USER_NOT_EXISTS },
       });
     }
   } catch (error) {
     res.status(error.statusCode || 500).json({
       status: "FAILURE",
-      error: [{ msg: INTERNAL_SERVER_ERROR }],
+      error: { msg: INTERNAL_SERVER_ERROR },
     });
   } finally {
     await closeDbConnection(connection);

@@ -16,7 +16,7 @@ exports.fetchUserDetails = async (connectionPromise, user) => {
 exports.fetchUserDetailsByUserId = async (connectionPromise, user) => {
   return new Promise(async (resolve, reject) => {
     connectionPromise(
-      `SELECT user_id,username,email,name FROM user_details WHERE user_id=? AND is_active=?`,
+      `SELECT user_id,username,email,name,avatar FROM user_details WHERE user_id=? AND is_active=?`,
       [user.user_id, 1]
     )
       .then(async rows => {
@@ -117,6 +117,21 @@ exports.deactivateUserByUserId = async (connectionPromise, user_id) => {
     )
       .then(async () => {
         resolve(true);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+exports.updateUserAvatarDetails = async (connectionPromise, user) => {
+  return new Promise(async (resolve, reject) => {
+    connectionPromise(
+      "UPDATE user_details SET avatar = ? WHERE user_id = ? AND is_active=?",
+      [user.avatar, user.user_id, 1]
+    )
+      .then(result => {
+        resolve(result);
       })
       .catch(err => {
         reject(err);

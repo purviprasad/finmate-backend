@@ -27,3 +27,4 @@ exports.INSERT_SUCCESS = "added successfully";
 exports.UPDATE_SUCCESS = "updated successfully";
 exports.DASHBOARD_DETAILS_DOES_NOT_EXISTS = "No dashboard details found";
 exports.BUDGET_DOES_NOT_EXISTS = "No budget details found";
+exports.USER_NOT_EXISTS = "User does not exist";

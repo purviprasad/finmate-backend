@@ -2,7 +2,7 @@ const { getDbConnection, closeDbConnection } = require("../config/dbconfig");
 const util = require("util");
 const {
   INTERNAL_SERVER_ERROR,
-  // USER_UPDATED_SUCCESS,
+  USER_UPDATED_SUCCESS,
   USER_NOT_EXISTS,
 } = require("../messages/responseMessages");
 const {
@@ -10,7 +10,7 @@ const {
   fetchUserDetailsByUserId,
   updateUserAvatarDetails,
   updateUserPasswordDetails,
-  // updateUserDetails,
+  updateUser,
 } = require("../repository/userRepository");
 const bcrypt = require("bcryptjs");
 
@@ -86,6 +86,32 @@ exports.updateUserPassword = async (req, res) => {
         status: "SUCCESS",
         msg: "User Password Updated Successfully!",
       });
+    } else {
+      res.status(400).json({
+        status: "FAILURE",
+        error: { name: user.name, msg: USER_NOT_EXISTS },
+      });
+    }
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      status: "FAILURE",
+      error: { msg: INTERNAL_SERVER_ERROR },
+    });
+  } finally {
+    await closeDbConnection(connection);
+  }
+};
+
+exports.updateUserDetails = async (req, res) => {
+  let connection;
+  try {
+    connection = await getDbConnection();
+    let user = req.body;
+    let connectionPromise = util.promisify(connection.query).bind(connection);
+    let result = await updateUser(connectionPromise, user);
+    // check if user exists in the database, yes - update user, no - return error
+    if (result.affectedRows > 0) {
+      res.status(200).json({ status: "SUCCESS", msg: USER_UPDATED_SUCCESS });
     } else {
       res.status(400).json({
         status: "FAILURE",

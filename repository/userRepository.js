@@ -138,3 +138,18 @@ exports.updateUserAvatarDetails = async (connectionPromise, user) => {
       });
   });
 };
+
+exports.updateUserPasswordDetails = async (connectionPromise, user) => {
+  return new Promise(async (resolve, reject) => {
+    connectionPromise(
+      "UPDATE user_details SET password = ? WHERE user_id = ? AND is_active=?",
+      [user.password, user.user_id, 1]
+    )
+      .then(result => {
+        resolve(result);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
